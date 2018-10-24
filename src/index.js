@@ -63,8 +63,8 @@ Router.use(cors())
 
 Router.get('/ingredients', (req,res)=>{
     console.log("Test");
-    Ingredient.find({},{_id : 0, name:1}, (error, ingredients) => {
-        res.json({data: ingredients})
+    Ingredient.find({},{_id : 0, name:1, price:1}, (error, ingredients) => {
+        res.json(ingredients)
     })
         //   .then((error, ingredients) => {
         //       if (!ingredients) {return res.sendStatus(404)}
