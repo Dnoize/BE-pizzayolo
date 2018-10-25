@@ -3,7 +3,7 @@ let Schema = Mongoose.Schema;
 
 let schema = new Schema({
     name: String,
-    ingredient: String,
+    ingredients: Array,
     price: Number,
 });
 module.exports = Mongoose.model("Pizza", schema);
