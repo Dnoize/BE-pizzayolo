@@ -18,7 +18,7 @@ Router.listen(3000)
 Router.use(cors())
 
 Router.get('/ingredients', (req,res)=>{
-    Ingredient.find({},{_id : 0, name:1, price:1}, (error, ingredients) => {
+    Ingredient.find({},{_id : 0, name:1, price:1, type : 1}, (error, ingredients) => {
         res.json(ingredients)
     })
 })
