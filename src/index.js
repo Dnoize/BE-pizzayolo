@@ -48,7 +48,7 @@ Router.get('/pizzas', (req, res) => {
 
         })
 
-
+        console.log("rien")
         res.json(pizzas)
 
     })
