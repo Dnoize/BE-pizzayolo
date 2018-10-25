@@ -19,20 +19,38 @@ Router.listen(3000)
 
 Router.use(cors())
 
-<<<<<<< HEAD
+
 Router.get('/ingredients', (req,res)=>{
     Ingredient.find({},{_id : 0, name:1, price:1, type : 1}, (error, ingredients) => {
-=======
-Router.get('/ingredients', (req, res) => {
-    Ingredient.find({}, { _id: 0, name: 1, price: 1 }, (error, ingredients) => {
->>>>>>> c559ff0693405dfeb0e4587913f9b9a201ae775a
+
+
         res.json(ingredients)
     })
 })
 
 Router.get('/pizzas', (req, res) => {
     Pizza.find({}, { _id: 0, name: 1, ingredients: 1, price: 1 }, (error, pizzas) => {
+
+        const return_pizzas = [];
+        pizzas.map(item => {
+            let ingredientsPizza = [];
+            let promises = []
+            item.ingredients.map(item2 => {
+                promises.push(Ingredient.find({ id_ing: item2 }))
+            })
+            Promise.all(promises).then(data => {
+                ingredientsPizza.push(data)
+                // console.log(ingredientsPizza)
+                item.ingredients = ingredientsPizza;
+                console.log(return_pizzas)
+
+            })
+
+        })
+
+
         res.json(pizzas)
+
     })
 })
 

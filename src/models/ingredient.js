@@ -9,5 +9,6 @@ let schema = new Schema({
     name: String,
     type: String,
     price: Number,
+
 });
 module.exports = Mongoose.model("Ingredient", schema);
