@@ -1,6 +1,8 @@
 const Mongoose = require("mongoose");
 const Ingredient = require("./models/ingredient");
+const Suggestion = require("./models/suggestion")
 const Pizza = require("./models/pizza");
+
 const Http = require("http");
 const express = require("express")
 const Router = express();
@@ -25,6 +27,7 @@ Router.get('/ingredients', (req, res) => {
 
 Router.get('/pizzas', (req, res) => {
     Pizza.find({}, { _id: 0, name: 1, ingredients: 1, price: 1 }, (error, pizzas) => {
+
         const return_pizzas = [];
         pizzas.map(item => {
             let ingredientsPizza = [];
@@ -41,6 +44,35 @@ Router.get('/pizzas', (req, res) => {
             })
 
         })
+
+
+        res.json(pizzas)
+
+    })
+})
+
+Router.get('/suggestions', (req, res) => {
+    Suggestion.find({}, { _id: 0, name: 1, ingredients: 1 }, (error, suggestions) => {
+
+        suggestions.forEach(element => {
+            console.log(element);
+            let query = [];
+            console.log(element.name)
+            console.log(element.ingredients);
+            element.ingredients.forEach(elementdeux => {
+                query.push({ 'id.ing': elementdeux });
+                console.log(query);
+            });
+            query = { $or: query }
+            Ingredient.find(query, { _id: 0, name: 1 }, (error, IngSug) => {
+                console.log(IngSug);
+                suggestions["IngredientName"] = IngSug;
+
+            })
+
+        });
+
+        res.json(suggestions)
 
     })
 })
