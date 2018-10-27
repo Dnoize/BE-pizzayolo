@@ -19,17 +19,37 @@ const schema = new Mongoose.Schema({
         unique: true,
         lowercase: true,
         required: 'You must specify an email',
-        validate: [validator.isEmail, "Adresse email invalide"]
+        validate: [Validator.isEmail, "Adresse email invalide"]
     },
     password: {
-        type: String
+        type: String,
+        required: 'You must specify an password',
+
     },
     telephone: {
+        type: Number,
+        required: 'You must specify an phone number',
+
+    },
+    street: {
+        type: String
+    },
+    number: {
         type: Number
     },
-    adress: {
+    cp: {
+        type: Number
+    },
+    boite: {
+        type: Number
+    },
+    city: {
+        type: String
+    },
+    country: {
         type: String
     }
+
 
 })
 
