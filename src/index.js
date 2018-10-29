@@ -1,113 +1,74 @@
 const Mongoose = require("mongoose");
 const Ingredient = require("./models/ingredient");
-const Suggestion = require("./models/suggestion")
+const Suggestion = require("./models/suggestion");
 const Pizza = require("./models/pizza");
 
 const Http = require("http");
-const express = require("express")
+const express = require("express");
 const Router = express();
-const cors = require('cors');
-
+const cors = require("cors");
 
 Mongoose.Promise = global.Promise;
 
-// ---------------------------- Connexion
+Mongoose.connect(
+  "mongodb://test:test00@ds133353.mlab.com:33353/vanessabeghin",
+  error => {
+    console.log("Mongo is now connected ");
+  }
+);
+Router.listen(3000);
 
-Mongoose.connect("mongodb://test:test00@ds133353.mlab.com:33353/vanessabeghin", (error) => {
-    console.log("Mongo is now connected ")
+Router.use(cors());
+
+Router.get("/ingredients", (req, res) => {
+  Ingredient.find({}, {}, (error, ingredients) => {
+    res.json(ingredients);
+  });
 });
-Router.listen(3000)
 
-Router.use(cors())
+Router.get("/pizzas", async (req, res) => {
+  let pizzas = await Pizza.find().populate("ingredients");
+  let ingredients = await Ingredient.find();
+  pizzas.forEach(pizza => {
+     let pizzaIngredients = pizza.ingredients.map(item => getIngredientsById(ingredients,item._id))
+    pizza.ingredients = pizzaIngredients;
+  });
+  res.json(pizzas);
+});
 
+function getIngredientsById(ingredientsArr, id) {
+  return ingredientsArr.find(item => {
+    return item.id == id;
+  });
+}
 
-Router.get('/ingredients', (req, res) => {
-    Ingredient.find({}, {}, (error, ingredients) => {
-        res.json(ingredients)
-    })
-})
+// .exec(function(err,pizza){
+//     if (err) return handleError(err);
+//     console.log(pizza[0]);
+//    })
 
-Router.get('/pizzas', async (req, res) => {
+// Pizza.find({}, { _id: 0, name: 1, ingredients: 1, price: 1 }, (error, pizzas) => {
 
-    let pizzas = await Pizza
-        .find()
-        .populate('ingredients');
+//     const return_pizzas = [];
+//     pizzas.map(item => {
+//         let ingredientsPizza = [];
+//         let promises = []
+//         item.ingredients.map(item2 => {
+//             promises.push(Ingredient.find({ id_ing: item2 }))
+//         })
+//         Promise.all(promises).then(data => {
+//             ingredientsPizza.push(data)
+//             // console.log(ingredientsPizza)
+//             item.ingredients = ingredientsPizza;
+//             console.log(return_pizzas)
 
-    let ingredients = await Ingredient.find()
+//         })
 
-    // console.log(pizzas);
-    // console.log(ingredients);
+//     })
 
-    pizzas.forEach( (pizza, i) => {
+//     res.json(pizzas)
 
-        pizza.ingredients.forEach( (ingredient, j) => {
-
-            (function(ingredient, j) {
-                let ingredientAsObject = pizza.ingredients.filter( (ingr) => {
-                    if(ingr._id === ingredient._id)
-                    {                        
-                        // console.log('--- ingr')
-                        // console.log(ingr);
-                        // console.log('--- ingredient')
-                        // console.log(ingredient)
-                        console.log("matching for the ingredient's id : " + ingr._id);
-                        return ingr;
-                    }
-                        
-                });                
-
-                // console.log(ingredientAsObject);
-            })(ingredient, j)
-        });
-
-    });
-    res.json(pizzas)
-    
-})
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // .exec(function(err,pizza){
-    //     if (err) return handleError(err);
-    //     console.log(pizza[0]);
-    //    })
-
-
-    // Pizza.find({}, { _id: 0, name: 1, ingredients: 1, price: 1 }, (error, pizzas) => {
-
-    //     const return_pizzas = [];
-    //     pizzas.map(item => {
-    //         let ingredientsPizza = [];
-    //         let promises = []
-    //         item.ingredients.map(item2 => {
-    //             promises.push(Ingredient.find({ id_ing: item2 }))
-    //         })
-    //         Promise.all(promises).then(data => {
-    //             ingredientsPizza.push(data)
-    //             // console.log(ingredientsPizza)
-    //             item.ingredients = ingredientsPizza;
-    //             console.log(return_pizzas)
-
-    //         })
-
-    //     })
-
-    //     res.json(pizzas)
-
-    // });
-
+// });
 
 // Router.get('/suggestions', (req, res) => {
 //     Suggestion.find({}, { _id: 0, name: 1, ingredients: 1 }, (error, suggestions) => {
@@ -129,5 +90,3 @@ Router.get('/pizzas', async (req, res) => {
 //         res.json(suggestions)
 //     })
 // })
-
-
