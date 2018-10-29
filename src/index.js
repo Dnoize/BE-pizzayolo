@@ -10,6 +10,8 @@ const express = require("express")
 const Router = express();
 const cors = require('cors');
 
+
+
 Mongoose.Promise = global.Promise;
 
 // ------------ Connexion
@@ -21,6 +23,9 @@ Router.use(cors())
 Router.listen(3000)
 
 Router.use(bodyparser.json());
+
+
+
 Router.get('/ingredients', (req, res) => {
     Ingredient.find({}, { _id: 0, name: 1, price: 1, id_ing: 1 }, (error, ingredients) => {
         res.json(ingredients)
@@ -28,18 +33,54 @@ Router.get('/ingredients', (req, res) => {
 })
 
 
+
+
+
+
+// User.findOne({"email":})
+
+Router.post("/login", (req, res, user) => {
+    let loggedIn = false;
+    let admin = false;
+    console.log("register")
+    console.log(req.body.email)
+    let authUser = User.find({ "email": req.body.email, "password": req.body.password }).then((result) => {
+        if (result.length > 0) {
+            loggedIn = true;
+        }
+        res.json(loggedIn)
+    })
+    /* let authUser = User.find(item => item.email === user.email && item.password === user.password)
+    if (User.find(item => item.email === user.email && item.password === user.password)) {
+        loggedIn = true;
+    
+        if (authUser.role === "admin") {
+            admin = true;
+        }
+        return true
+    } else {
+        return false
+    } */
+    // res.json(user);
+
+})
+
+
+
+
+
 Router.post("/register", (req, res) => {
     var firstname = req.body.firstname;
-    var email = req.body.firstname;
-    var telephone = req.body.firstname;
+    var email = req.body.email;
+    var telephone = req.body.telephone;
     var password = req.body.password;
-
+    console.log(req.body)
     var user = new User();
     user.firstname = firstname;
     user.email = email;
     user.telephone = telephone;
     user.password = password;
-
+    console.log(user)
     user.save((err, result) => {
         if (err) {
             console.log("bug");

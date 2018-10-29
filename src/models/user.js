@@ -48,6 +48,9 @@ const schema = new Mongoose.Schema({
     },
     country: {
         type: String
+    },
+    role: {
+        type: String
     }
 
 
