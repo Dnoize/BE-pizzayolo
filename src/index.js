@@ -1,9 +1,6 @@
 const Mongoose = require("mongoose");
 const Ingredient = require("./models/ingredient");
-<<<<<<< HEAD
 const Suggestion = require("./models/suggestion");
-=======
->>>>>>> d8c608881932fbc910551c4aed8d72e76e9ef12f
 const Pizza = require("./models/pizza");
 const User = require("./models/user");
 var bodyparser = require("body-parser");
@@ -17,15 +14,7 @@ const cors = require("cors");
 
 Mongoose.Promise = global.Promise;
 
-Mongoose.connect(
-  "mongodb://test:test00@ds133353.mlab.com:33353/vanessabeghin",
-  error => {
-    console.log("Mongo is now connected ");
-  }
-);
-Router.listen(3000);
 
-<<<<<<< HEAD
 Mongoose.connect("mongodb://test:test00@ds133353.mlab.com:33353/vanessabeghin", (error) => {
     console.log("Mongo is now connected ")
 });
@@ -156,28 +145,19 @@ Router.get('/pizzas', (req, res) => {
 
 //     })
 // })
-=======
-Router.use(cors());
-
-Router.get("/ingredients", (req, res) => {
-  Ingredient.find({}, {}, (error, ingredients) => {
-    res.json(ingredients);
-  });
-});
->>>>>>> d8c608881932fbc910551c4aed8d72e76e9ef12f
 
 Router.get("/pizzas", async (req, res) => {
-  let pizzas = await Pizza.find().populate("ingredients");
-  let ingredients = await Ingredient.find();
-  pizzas.forEach(pizza => {
-     let pizzaIngredients = pizza.ingredients.map(item => getIngredientsById(ingredients,item._id))
-    pizza.ingredients = pizzaIngredients;
-  });
-  res.json(pizzas);
+    let pizzas = await Pizza.find().populate("ingredients");
+    let ingredients = await Ingredient.find();
+    pizzas.forEach(pizza => {
+        let pizzaIngredients = pizza.ingredients.map(item => getIngredientsById(ingredients, item._id))
+        pizza.ingredients = pizzaIngredients;
+    });
+    res.json(pizzas);
 });
 
 function getIngredientsById(ingredientsArr, id) {
-  return ingredientsArr.find(item => {
-    return item.id == id;
-  });
+    return ingredientsArr.find(item => {
+        return item.id == id;
+    });
 }
