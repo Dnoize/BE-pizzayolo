@@ -1,9 +1,16 @@
 const Mongoose = require("mongoose");
 let Schema = Mongoose.Schema;
 
-let schema = new Schema({
+let pizzaSchema = new Schema({
+    _id : Schema.Types.ObjectId,
     name: String,
-    ingredient: [Number],
-    price: Number,
+    ingredients: [
+        { 
+            type: Schema.Types.ObjectId, 
+            ref: 'Ingredient'
+        }
+    ],
+    price: Number
 });
-module.exports = Mongoose.model("Pizza", schema);
+
+module.exports = Mongoose.model("Pizza", pizzaSchema,"pizzas");
