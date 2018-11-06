@@ -34,12 +34,8 @@
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
     "express": "^4.13.3",
-<<<<<<< HEAD
     "express-handlebars": "^3.0.0",
     "mongoose": "^5.3.6",
-=======
-    "mongoose": "^5.2.10",
->>>>>>> d8c608881932fbc910551c4aed8d72e76e9ef12f
     "morgan": "^1.8.0",
     "passport-local-mongoose": "^5.0.1",
     "resource-router-middleware": "^0.6.0",
