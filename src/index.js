@@ -33,6 +33,7 @@ Router.get('/ingredients', (req, res) => {
 
 
 
+//-------------------------------------- LOGIN -----------------------------------------------
 
 
 
@@ -49,22 +50,11 @@ Router.post("/login", (req, res, user) => {
         }
         res.json(loggedIn)
     })
-    /* let authUser = User.find(item => item.email === user.email && item.password === user.password)
-    if (User.find(item => item.email === user.email && item.password === user.password)) {
-        loggedIn = true;
-    
-        if (authUser.role === "admin") {
-            admin = true;
-        }
-        return true
-    } else {
-        return false
-    } */
-    // res.json(user);
 
 })
 
 
+//-------------------------------------- REGISTER -----------------------------------------------
 
 
 
@@ -91,60 +81,6 @@ Router.post("/register", (req, res) => {
     })
 })
 
-
-
-
-Router.get('/pizzas', (req, res) => {
-    Pizza.find({}, { _id: 0, name: 1, ingredients: 1, price: 1 }, (error, pizzas) => {
-
-        // const return_pizzas = [];
-        // pizzas.map(item => {
-        //     let ingredientsPizza = [];
-        //     let promises = []
-        //     item.ingredients.map(item2 => {
-        //         promises.push(Ingredient.find({ id_ing: item2 }))
-        //     })
-        //     Promise.all(promises).then(data => {
-        //         ingredientsPizza.push(data)
-        //         // console.log(ingredientsPizza)
-        //         item.ingredients = ingredientsPizza;
-        //         console.log(return_pizzas)
-
-        //     })
-
-        // })
-
-        console.log("rien")
-        res.json(pizzas)
-
-    })
-})
-
-// Router.get('/suggestions', (req, res) => {
-//     Suggestion.find({}, { _id: 0, name: 1, ingredients: 1 }, (error, suggestions) => {
-
-//         suggestions.forEach(element => {
-//             console.log(element);
-//             let query = [];
-//             console.log(element.name)
-//             console.log(element.ingredients);
-//             element.ingredients.forEach(elementdeux => {
-//                 query.push({ 'id.ing': elementdeux });
-//                 console.log(query);
-//             });
-//             query = { $or: query }
-//             Ingredient.find(query, { _id: 0, name: 1 }, (error, IngSug) => {
-//                 console.log(IngSug);
-//                 suggestions["IngredientName"] = IngSug;
-
-//             })
-
-//         });
-
-//         res.json(suggestions)
-
-//     })
-// })
 
 //-------------------------------------- GET PIZZAS -----------------------------------------------
 
