@@ -1,6 +1,7 @@
 const Mongoose = require("mongoose");
 const Ingredient = require("./models/ingredient");
 const Pizza = require("./models/pizza");
+const Suggestion = require("./models/suggestion")
 
 const Http = require("http");
 const express = require("express");
@@ -19,11 +20,15 @@ Router.listen(3000);
 
 Router.use(cors());
 
+//------------------------------------ GET INGREDIENTS -------------------------------------------
+
 Router.get("/ingredients", (req, res) => {
   Ingredient.find({}, {}, (error, ingredients) => {
     res.json(ingredients);
   });
 });
+
+//-------------------------------------- GET PIZZAS -----------------------------------------------
 
 Router.get("/pizzas", async (req, res) => {
   let pizzas = await Pizza.find().populate("ingredients");
@@ -34,6 +39,21 @@ Router.get("/pizzas", async (req, res) => {
   });
   res.json(pizzas);
 });
+
+//------------------------------------ GET SUGGESTIONS --------------------------------------------
+
+Router.get("/suggestions", async (req, res) => {
+  let suggestions = await Suggestion.find().populate("ingredients");
+  let ingredients = await Ingredient.find();
+  suggestions.forEach(suggestion => {
+     let suggestionIngredients = suggestion.ingredients.map(item => getIngredientsById(ingredients,item._id))
+    suggestion.ingredients = suggestionIngredients;
+  });
+  res.json(suggestions);
+});
+
+
+//----------------------- GET ID INGREDIENTS FOR PIZZAS & SUGGESTIONS ----------------------------
 
 function getIngredientsById(ingredientsArr, id) {
   return ingredientsArr.find(item => {
