@@ -10,14 +10,12 @@ const express = require("express");
 const Router = express();
 const cors = require("cors");
 
-
-
 Mongoose.Promise = global.Promise;
-
 
 Mongoose.connect("mongodb://test:test00@ds133353.mlab.com:33353/vanessabeghin", (error) => {
     console.log("Mongo is now connected ")
 });
+
 Router.use(cors())
 Router.listen(3000)
 
@@ -26,7 +24,7 @@ Router.use(bodyparser.json());
 
 
 Router.get('/ingredients', (req, res) => {
-    Ingredient.find({}, { _id: 0, name: 1, price: 1, id_ing: 1 }, (error, ingredients) => {
+    Ingredient.find({}, {}, (error, ingredients) => {
         res.json(ingredients)
     })
 })
@@ -97,12 +95,17 @@ Router.get("/pizzas", async (req, res) => {
 //------------------------------------ GET SUGGESTIONS --------------------------------------------
 
 Router.get("/suggestions", async (req, res) => {
-  let suggestions = await Suggestion.find().populate("ingredients");
-  let ingredients = await Ingredient.find();
-  suggestions.forEach(suggestion => {
-     let suggestionIngredients = suggestion.ingredients.map(item => getIngredientsById(ingredients,item._id))
-    suggestion.ingredients = suggestionIngredients;
-  });
+    console.log(req.query);
+    
+    
+    
+    let suggestions = await Suggestion.find().populate("ingredients");
+    let ingredients = await Ingredient.find();
+    suggestions.forEach(suggestion => {
+        let suggestionIngredients = suggestion.ingredients.map(item => getIngredientsById(ingredients,item._id))
+        suggestion.ingredients = suggestionIngredients;
+    });
+    
   res.json(suggestions);
 });
 
