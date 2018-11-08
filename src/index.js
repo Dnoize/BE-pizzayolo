@@ -13,7 +13,7 @@ const cors = require("cors");
 
 
 Mongoose.Promise = global.Promise;
-
+Mongoose.set("debug",true)
 
 Mongoose.connect("mongodb://test:test00@ds133353.mlab.com:33353/vanessabeghin", (error) => {
     console.log("Mongo is now connected ")
@@ -25,11 +25,6 @@ Router.use(bodyparser.json());
 
 
 
-Router.get('/ingredients', (req, res) => {
-    Ingredient.find({}, { _id: 0, name: 1, price: 1, id_ing: 1 }, (error, ingredients) => {
-        res.json(ingredients)
-    })
-})
 
 
 
@@ -94,23 +89,40 @@ Router.get("/pizzas", async (req, res) => {
     res.json(pizzas);
 });
 
-//------------------------------------ GET SUGGESTIONS --------------------------------------------
+//----------------------------------- GET ID INGREDIENTS ----------------------------
 
-Router.get("/suggestions", async (req, res) => {
-  let suggestions = await Suggestion.find().populate("ingredients");
-  let ingredients = await Ingredient.find();
-  suggestions.forEach(suggestion => {
-     let suggestionIngredients = suggestion.ingredients.map(item => getIngredientsById(ingredients,item._id))
-    suggestion.ingredients = suggestionIngredients;
-  });
-  res.json(suggestions);
-});
-
-
-//----------------------- GET ID INGREDIENTS FOR PIZZAS & SUGGESTIONS ----------------------------
+Router.get('/ingredients', (req, res) => {
+    Ingredient.find({}, {}, (error, ingredients) => {
+        res.json(ingredients)
+    })
+})
 
 function getIngredientsById(ingredientsArr, id) {
     return ingredientsArr.find(item => {
         return item.id == id;
     });
 }
+
+//------------------------------------ GET SUGGESTIONS --------------------------------------------
+
+Router.get("/suggestions", async (req, res) => {
+    console.log('test!!!!!!!!!!!!!!!!!!');
+    console.log(req.query.ingredients);
+    let suggestions = await Suggestion.find({"ingredients": {$all: [{"_id": Mongoose.Types.ObjectId("5bd193c88c34b5df326e527b")},{"_id": Mongoose.Types.ObjectId("5bd193c88c34b5df326e528f")}]}});
+
+    console.log(suggestions);
+    console.log('test!!!!!!!!!!!!!!!!!!');
+
+    // let resultMatching = Suggestion.find({results:{$elementMatch:{ingFromSugg}}})
+    
+    
+    // let ingredients = await Ingredient.find();
+    // suggestions.forEach(suggestion => {
+    //     let suggestionIngredients = suggestion.ingredients.map(item => getIngredientsById(ingredients,item._id))
+    //     suggestion.ingredients = suggestionIngredients;
+    //     console.log(suggestionIngredients);
+    // });
+    // console.log(suggestions);
+    
+    res.json(suggestions);
+});

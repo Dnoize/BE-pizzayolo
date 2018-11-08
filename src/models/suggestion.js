@@ -8,3 +8,5 @@ let schema = new Schema({
 });
 
 module.exports = Mongoose.model("Suggestion", schema);
+
+
