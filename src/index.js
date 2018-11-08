@@ -108,7 +108,7 @@ function getIngredientsById(ingredientsArr, id) {
 Router.get("/suggestions", async (req, res) => {
     console.log('test!!!!!!!!!!!!!!!!!!');
     console.log(req.query.ingredients);
-    let suggestions = await Suggestion.find({"ingredients": {$all: [{"_id": Mongoose.Types.ObjectId("5bd193c88c34b5df326e527b")},{"_id": Mongoose.Types.ObjectId("5bd193c88c34b5df326e528f")}]}});
+    let suggestions = await Suggestion.find({"ingredients": {$all: [{"_id": Mongoose.Types.ObjectId("5bd193c88c34b5df326e527b")}]}});
 
     console.log(suggestions);
     console.log('test!!!!!!!!!!!!!!!!!!');
