@@ -106,23 +106,17 @@ function getIngredientsById(ingredientsArr, id) {
 //------------------------------------ GET SUGGESTIONS --------------------------------------------
 
 Router.get("/suggestions", async (req, res) => {
-    console.log('test!!!!!!!!!!!!!!!!!!');
-    console.log(req.query.ingredients);
-    let suggestions = await Suggestion.find({"ingredients": {$all: [{"_id": Mongoose.Types.ObjectId("5bd193c88c34b5df326e527b")}]}});
-
-    console.log(suggestions);
-    console.log('test!!!!!!!!!!!!!!!!!!');
-
-    // let resultMatching = Suggestion.find({results:{$elementMatch:{ingFromSugg}}})
+    let queryIngredients = req.query.ingredients
+    let idOfIngredient = []
+    queryIngredients.forEach(item=>{
+        idOfIngredient.push(Mongoose.Types.ObjectId(item))
+    })
     
+    console.log(idOfIngredient);
+  
+    let suggestions = await Suggestion.find({"ingredients._id": {$all: idOfIngredient}});    
+    console.log("suggestions = " + suggestions);
     
-    // let ingredients = await Ingredient.find();
-    // suggestions.forEach(suggestion => {
-    //     let suggestionIngredients = suggestion.ingredients.map(item => getIngredientsById(ingredients,item._id))
-    //     suggestion.ingredients = suggestionIngredients;
-    //     console.log(suggestionIngredients);
-    // });
-    // console.log(suggestions);
     
     res.json(suggestions);
 });
