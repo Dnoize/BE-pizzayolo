@@ -111,12 +111,14 @@ Router.get("/suggestions", async (req, res) => {
     queryIngredients.forEach(item=>{
         idOfIngredient.push(Mongoose.Types.ObjectId(item))
     })
-    
-    console.log(idOfIngredient);
   
-    let suggestions = await Suggestion.find({"ingredients._id": {$all: idOfIngredient}});    
-    console.log("suggestions = " + suggestions);
+    let suggestions = await Suggestion.find({"ingredients._id": {$all: idOfIngredient}}).populate("ingredients");    
     
-    
+    let ingredients = await Ingredient.find();
+    suggestions.forEach(suggestion => {
+        let suggestionIngredients = suggestion.ingredients.map(item => getIngredientsById(ingredients, item._id))
+        suggestion.ingredients = suggestionIngredients;
+        
+    });    
     res.json(suggestions);
 });
