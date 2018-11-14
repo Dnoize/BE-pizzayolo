@@ -9,7 +9,7 @@ const Http = require("http");
 const express = require("express");
 const Router = express();
 const cors = require("cors");
-
+const _ = require('lodash');
 
 
 Mongoose.Promise = global.Promise;
@@ -115,10 +115,13 @@ Router.get("/suggestions", async (req, res) => {
     let suggestions = await Suggestion.find({"ingredients._id": {$all: idOfIngredient}}).populate("ingredients");    
     
     let ingredients = await Ingredient.find();
+    let suggestionIngredients= [];
     suggestions.forEach(suggestion => {
-        let suggestionIngredients = suggestion.ingredients.map(item => getIngredientsById(ingredients, item._id))
-        suggestion.ingredients = suggestionIngredients;
-        
-    });    
+            suggestion.ingredients.forEach(item => suggestionIngredients.push(getIngredientsById(ingredients, item._id)))
+        // suggestion.ingredients = suggestionIngredients;
+    });
+    suggestions.filtered_ingredients =  _.uniqWith(suggestionIngredients, _.isEqual);
+    console.log('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
+    console.log(suggestions)
     res.json(suggestions);
 });
